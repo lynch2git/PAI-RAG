@@ -1,7 +1,6 @@
 import logging
 import os
 from typing import Dict, List, Any
-
 from pai_rag.integrations.llms.multimodal.open_ai_alike_multi_modal import (
     OpenAIAlikeMultiModal,
 )
