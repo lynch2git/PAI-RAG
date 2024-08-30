@@ -10,8 +10,10 @@ ENV POETRY_NO_INTERACTION=1 \
 WORKDIR /app
 COPY . .
 
-RUN /bin/bash && python3 -m venv .venv && . .venv/bin/activate
-RUN poetry install && pip3 install git+https://github.com/facebookresearch/detectron2.git && rm -rf $POETRY_CACHE_DIR
+RUN apt-get update && apt-get install -y git
+RUN /bin/bash && python3 -m venv .venv && . .venv/bin/activate && poetry install
+RUN git clone https://github.com/facebookresearch/detectron2.git && cd detectron2 && pip install -e .
+RUN rm -rf $POETRY_CACHE_DIR
 
 FROM python:3.11-slim AS prod
 
