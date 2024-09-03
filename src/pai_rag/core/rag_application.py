@@ -193,23 +193,27 @@ class RagApplication:
         else:
             response = await searcher.astream_query(query.question)
 
-        node_results = response.source_nodes
         new_query = query.question
-
-        reference_docs = [
-            ContextDoc(
-                text=score_node.node.get_content(),
-                metadata=score_node.node.metadata,
-                score=score_node.score,
-            )
-            for score_node in node_results
-        ]
-
-        result_info = {
-            "session_id": session_id,
-            "docs": reference_docs,
-            "new_query": new_query,
-        }
+        if query.return_context:
+            node_results = response.source_nodes
+            reference_docs = [
+                ContextDoc(
+                    text=score_node.node.get_content(),
+                    metadata=score_node.node.metadata,
+                    score=score_node.score,
+                )
+                for score_node in node_results
+            ]
+            result_info = {
+                "session_id": session_id,
+                "docs": reference_docs,
+                "new_query": new_query,
+            }
+        else:
+            result_info = {
+                "session_id": session_id,
+                "new_query": new_query,
+            }
 
         if not query.stream:
             return RagResponse(answer=response.response, **result_info)

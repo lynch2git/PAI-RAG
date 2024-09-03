@@ -14,6 +14,7 @@ class RagQuery(BaseModel):
     vector_db: VectorDbConfig | None = None
     stream: bool | None = False
     with_intent: bool | None = False
+    return_context: bool | None = True
 
 
 class RetrievalQuery(BaseModel):
